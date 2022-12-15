@@ -4,7 +4,7 @@ public class Test {
 
     // создаем массив элементов нашей коллекции и выводим на экран (поскольку в
     // нашем случае это строки, то можно использваоть класс StringBuilder)
-    public static void pretty_string(Objects_Box<String> obj){
+    public static void pretty_string(Custom_linked_list<String> obj) {
         Object[] arr = obj.toArray();
         StringBuilder sb = new StringBuilder();
         for (Object o : arr) {
@@ -16,10 +16,10 @@ public class Test {
 
     public static void main(String[] args) {
 
-        // создаем объект класса Objects_Box, допустим мы хотим создать коллекцию из объектов класса String
-        Objects_Box<String> simple_box = new Objects_Box<>();
+        // создаем объект класса Custom_linked_list, допустим мы хотим создать коллекцию из объектов класса String
+        Custom_linked_list<String> simple_box = new Custom_linked_list<>();
 
-        // создаём и добавляем элементы в Objects_Box
+        // создаём и добавляем элементы в Custom_linked_list
         String one = "Новый элемент";
         String two = "Второй элемент";
         String three = "Третий элемент";
@@ -40,11 +40,11 @@ public class Test {
         simple_box.clear();
         System.out.println();
 
-        Objects_Box<String> simple_box1 = new Objects_Box<>();
+        Custom_linked_list<String> simple_box1 = new Custom_linked_list<>();
         System.out.printf("Объект '%s' удалось удалить из пустой коллекции? %b \n", three, simple_box1.remove(three)); // false
 
-        Objects_Box<String> simple_box2 = new Objects_Box<>();
-        Objects_Box<String> simple_box3 = new Objects_Box<>();
+        Custom_linked_list<String> simple_box2 = new Custom_linked_list<>();
+        Custom_linked_list<String> simple_box3 = new Custom_linked_list<>();
 
         simple_box2.add(five);
         simple_box2.add(three);
@@ -54,7 +54,7 @@ public class Test {
         simple_box3.add(six);
 
         System.out.printf("Коллекция simple_box2 содержит все элементы simple_box3? %b \n", simple_box2.containsAll(simple_box3));
-        System.out.printf("Удалось удалить все элементы simple_box3 из simple_box2? %b \n",simple_box3.removeAll(simple_box2));
+        System.out.printf("Удалось удалить все элементы simple_box3 из simple_box2? %b \n", simple_box3.removeAll(simple_box2));
         pretty_string(simple_box3);
 
 

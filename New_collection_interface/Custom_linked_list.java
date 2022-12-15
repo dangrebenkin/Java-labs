@@ -3,7 +3,7 @@ package New_collection_interface;
 import java.util.Collection;
 import java.util.Iterator;
 
-class Objects_Box<E> implements Collection<E> {
+class Custom_linked_list<E> implements Collection<E> {
 
     private Node<E> last_of_the_list;
     private Node<E> first_of_the_list;
