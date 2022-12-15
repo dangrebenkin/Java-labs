@@ -110,29 +110,25 @@ class Custom_linked_list<E> implements Collection<E> {
 
     @Override
     public Object[] toArray() {
-        Object[] result = new Object[0];
-        if (size > 0) {
-            Object[] array_of_objects = new Object[size];
-            Node<E> current_node = first_of_the_list;
-            for (int j = 0; j < size; j++) {
-                if (j == size - 1) {
-                    array_of_objects[j] = current_node.data;
-                    result = array_of_objects;
-                    break;
-                } else {
-                    array_of_objects[j] = current_node.data;
-                    current_node = current_node.next;
-                }
+        Object[] array_of_objects = new Object[size];
+        Node<E> current_node = first_of_the_list;
+        for (int j = 0; j < size; j++) {
+            if (j == size - 1) {
+                array_of_objects[j] = current_node.data;
+                break;
+            } else {
+                array_of_objects[j] = current_node.data;
+                current_node = current_node.next;
             }
         }
-        return result;
+        return array_of_objects;
     }
 
     @Override
     public boolean containsAll(Collection<?> c) {
         boolean result = true;
         Object[] arr = c.toArray();
-        if (arr.length != 0) {
+        if (!isEmpty() && arr.length != 0) {
             for (Object o : arr)
                 if (!contains(o)) {
                     result = false;
@@ -146,7 +142,7 @@ class Custom_linked_list<E> implements Collection<E> {
     public boolean removeAll(Collection<?> c) {
         boolean result = true;
         Object[] arr = c.toArray();
-        if (arr.length != 0) {
+        if (!isEmpty() && arr.length != 0) {
             for (Object o : arr)
                 if (!remove(o))
                     result = false;
@@ -156,38 +152,40 @@ class Custom_linked_list<E> implements Collection<E> {
 
     @Override
     public boolean retainAll(Collection<?> c) {
-//        Object[] arr = c.toArray();
-//        Node<E> current_node = first_of_the_list;
-//        if (arr.length != 0) {
-//            for (Object o : arr) {
-//                for (int j = 0; j < size; j++) {
-//                    if (!current_node.data.equals(o)) {
-//                        if (j == size-1) {
-//                            remove(o);
-//                        }else {
-//                            remove(o);
-//                            current_node = current_node.next;
-//                        }
-//
-//                    }
-//                }
-//            }
-//
-//        } else {
-//            clear();
-//        }
-        return true;
+        boolean result = false;
+        Object[] arr = c.toArray();
+        if (!isEmpty() && arr.length != 0) {
+            Node<E> current_node = first_of_the_list;
+            for (int j = 0; j < size; j++) {
+                for (Object o : arr) {
+                    if (current_node.data.equals(o)) {
+                        if (current_node.next == null) {
+                            break;
+                        } else {
+                            current_node = current_node.next;
+                        }
+                    } else {
+                        remove(o);
+                        result = true;
+                        if (current_node.next != null) {
+                            current_node = current_node.next;
+                        }
+                    }
+                }
+            }
+        }
+
+        return result;
     }
 
     @Override
     public boolean addAll(Collection<? extends E> c) {
-        boolean result = true;
+        boolean result = false;
 //        Object[] arr = c.toArray();
 //        if (arr.length != 0) {
-//            for (Object o : arr)
-//                if (!add((E) o)) {
-//                    result = false;
-//                }
+//            for (Object o : arr) {
+//                ???
+//            }
 //        }
         return result;
     }

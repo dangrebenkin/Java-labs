@@ -26,37 +26,62 @@ public class Test {
         String four = "Четвертый элемент";
         String five = "Пятый элемент";
         String six = "Шестой элемент";
+        String seven = "Седьмой элемент";
 
         simple_box.add(one);
         simple_box.add(two);
         simple_box.add(three);
         pretty_string(simple_box);
-        System.out.println();
 
         System.out.printf("Размер коллекции: %d \n", simple_box.size());
-        System.out.printf("Объект '%s' находится в коллекции? %b \n", one, simple_box.contains(one));
-        System.out.printf("Объект '%s' удалось удалить? %b \n", three, simple_box.remove(three)); // true
+        System.out.printf("Объект '%s' находится в коллекции? %b \n",
+                one, simple_box.contains(one));
+        System.out.printf("Объект '%s' удалось удалить? %b \n",
+                three, simple_box.remove(three)); // true
         System.out.printf("Коллекция пустая? %b \n", simple_box.isEmpty());
+        pretty_string(simple_box);
         simple_box.clear();
+        System.out.printf("Объект '%s' удалось удалить из пустой коллекции? %b \n",
+                three, simple_box.remove(three)); // false
         System.out.println();
-
-        Custom_linked_list<String> simple_box1 = new Custom_linked_list<>();
-        System.out.printf("Объект '%s' удалось удалить из пустой коллекции? %b \n", three, simple_box1.remove(three)); // false
 
         Custom_linked_list<String> simple_box2 = new Custom_linked_list<>();
         Custom_linked_list<String> simple_box3 = new Custom_linked_list<>();
+        Custom_linked_list<String> simple_box4 = new Custom_linked_list<>();
 
         simple_box2.add(five);
         simple_box2.add(three);
+        simple_box2.add(seven);
 
         simple_box3.add(four);
         simple_box3.add(five);
         simple_box3.add(six);
 
-        System.out.printf("Коллекция simple_box2 содержит все элементы simple_box3? %b \n", simple_box2.containsAll(simple_box3));
-        System.out.printf("Удалось удалить все элементы simple_box3 из simple_box2? %b \n", simple_box3.removeAll(simple_box2));
-        pretty_string(simple_box3);
+        simple_box4.add(four);
+        simple_box4.add(five);
+        simple_box4.add(six);
 
+        pretty_string(simple_box2);
+        pretty_string(simple_box3);
+        System.out.printf("Коллекция simple_box2 содержит все элементы simple_box3? %b \n",
+                simple_box2.containsAll(simple_box3));
+        System.out.printf("Удалось ли удалить все элементы simple_box2 из simple_box3? %b \n",
+                simple_box3.removeAll(simple_box2));
+        pretty_string(simple_box2);
+        pretty_string(simple_box3);
+        System.out.println();
+
+        pretty_string(simple_box3);
+        pretty_string(simple_box4);
+        System.out.printf("Изменилась ли коллекция после удаления несовпадающих элементов? %b \n",
+                simple_box4.retainAll(simple_box3));
+        pretty_string(simple_box3);
+        System.out.println();
+
+//        System.out.printf("Удалось ли добавить все элементы simple_box3 в simple_box2? %b \n",
+//                simple_box2.addAll(simple_box3));
+//        pretty_string(simple_box2);
+//        System.out.println();
 
     }
 }
