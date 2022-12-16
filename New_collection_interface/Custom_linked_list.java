@@ -66,7 +66,8 @@ class Custom_linked_list<E> implements Collection<E> {
             first_of_the_list.next = last_of_the_list;
             size++;
         } else {
-            last_of_the_list.next = new Node<>(t, last_of_the_list, null);
+            last_of_the_list = new Node<>(t, last_of_the_list,null);
+            last_of_the_list.prev.next = last_of_the_list;
             size++;
         }
 
@@ -181,12 +182,12 @@ class Custom_linked_list<E> implements Collection<E> {
     @Override
     public boolean addAll(Collection<? extends E> c) {
         boolean result = false;
-//        Object[] arr = c.toArray();
-//        if (arr.length != 0) {
-//            for (Object o : arr) {
-//                ???
-//            }
-//        }
+        Object[] arr = c.toArray();
+        if (arr.length != 0) {
+            for (Object o : arr) {
+                add((E) o);
+            }
+        }
         return result;
     }
 

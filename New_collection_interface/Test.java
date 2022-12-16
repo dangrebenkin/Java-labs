@@ -52,6 +52,7 @@ public class Test {
         simple_box2.add(five);
         simple_box2.add(three);
         simple_box2.add(seven);
+        simple_box2.add(one);
 
         simple_box3.add(four);
         simple_box3.add(five);
@@ -78,10 +79,12 @@ public class Test {
         pretty_string(simple_box3);
         System.out.println();
 
-//        System.out.printf("Удалось ли добавить все элементы simple_box3 в simple_box2? %b \n",
-//                simple_box2.addAll(simple_box3));
-//        pretty_string(simple_box2);
-//        System.out.println();
+        pretty_string(simple_box3);
+        pretty_string(simple_box2);
+        System.out.printf("Удалось ли добавить все элементы simple_box3 в simple_box2? %b \n",
+                simple_box2.addAll(simple_box3));
+        pretty_string(simple_box2);
+        System.out.println();
 
     }
 }
