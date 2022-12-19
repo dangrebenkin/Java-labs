@@ -80,6 +80,7 @@ class Custom_linked_list<E> implements Collection<E> {
         if (size == 1) {
             if (first_of_the_list.data.equals(o)) {
                 clear();
+                result = true;
             }
         } else if (size > 1) {
             Node<E> current_node = first_of_the_list;
@@ -141,12 +142,13 @@ class Custom_linked_list<E> implements Collection<E> {
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        boolean result = true;
+        boolean result = false;
         Object[] arr = c.toArray();
         if (!isEmpty() && arr.length != 0) {
             for (Object o : arr)
-                if (!remove(o))
-                    result = false;
+                if(remove(o)) {
+                    result = true;
+                }
         }
         return result;
     }
