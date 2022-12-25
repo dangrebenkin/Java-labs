@@ -1,5 +1,8 @@
 package New_collection_interface;
 
+import java.util.Arrays;
+import java.util.Iterator;
+
 public class Test {
 
     // создаем массив элементов нашей коллекции и выводим на экран (поскольку в
@@ -86,6 +89,14 @@ public class Test {
         pretty_string(simple_box2);
         System.out.println();
 
+        Iterator <?> iter = simple_box2.iterator();
+        while (iter.hasNext()) {
+            System.out.println(iter.next());
+        }
+        String[] array_of_strings = new String[simple_box2.size()];
+        String[] arr = simple_box2.toArray(array_of_strings);
+        System.out.println(Arrays.toString(arr));
     }
 }
+
 

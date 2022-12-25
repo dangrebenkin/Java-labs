@@ -66,7 +66,7 @@ class Custom_linked_list<E> implements Collection<E> {
             first_of_the_list.next = last_of_the_list;
             size++;
         } else {
-            last_of_the_list = new Node<>(t, last_of_the_list,null);
+            last_of_the_list = new Node<>(t, last_of_the_list, null);
             last_of_the_list.prev.next = last_of_the_list;
             size++;
         }
@@ -146,7 +146,7 @@ class Custom_linked_list<E> implements Collection<E> {
         Object[] arr = c.toArray();
         if (!isEmpty() && arr.length != 0) {
             for (Object o : arr)
-                if(remove(o)) {
+                if (remove(o)) {
                     result = true;
                 }
         }
@@ -195,12 +195,48 @@ class Custom_linked_list<E> implements Collection<E> {
 
     @Override
     public Iterator<E> iterator() {
-        return null;
+        return new Iterator<>() {
+
+            private Node<E> current_node = first_of_the_list;
+
+            @Override
+            public boolean hasNext() {
+                return current_node.next != null;
+            }
+
+            @Override
+            public E next() {
+                if (hasNext()) {
+                    current_node = current_node.next;
+                    return current_node.data;
+                } else {
+                    return null;
+                }
+            }
+        };
     }
 
     @Override
     public <T1> T1[] toArray(T1[] a) {
-        return null;
+        T1[] result = null;
+        if (a.length >= size) {
+            Iterator<?> iter = iterator();
+            int counter = 0;
+            while (iter.hasNext()) {
+                a[counter] = (T1) iter.next();
+                counter ++;
+            }
+            result = a;
+        } else {
+            Object[] array_of_objects = new Object[a.length];
+            Iterator<?> iter = iterator();
+            int counter = 0;
+            while (iter.hasNext()) {
+                array_of_objects[counter] = iter.next();
+                counter ++;
+            }
+            result = (T1[]) array_of_objects;
+        }
+        return result;
     }
-
 }
