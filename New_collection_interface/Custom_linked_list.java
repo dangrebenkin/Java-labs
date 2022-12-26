@@ -218,23 +218,21 @@ class Custom_linked_list<E> implements Collection<E> {
     @Override
     public <T1> T1[] toArray(T1[] a) {
         T1[] result;
+        Iterator<?> iter = iterator();
+        int counter = 0;
         if (a.length >= size) {
-            Iterator<?> iter = iterator();
-            int counter = 0;
             while (iter.hasNext()) {
                 a[counter] = (T1) iter.next();
                 counter ++;
             }
             result = a;
         } else {
-            Object[] array_of_objects = new Object[size];
-            Iterator<?> iter = iterator();
-            int counter = 0;
+            Object[] new_array = new Object[size];
             while (iter.hasNext()) {
-                array_of_objects[counter] = iter.next();
-                counter ++;
+                new_array[counter] = iter.next();
+                counter++;
             }
-            result = (T1[]) array_of_objects;
+            result = (T1[]) new_array;
         }
         return result;
     }
