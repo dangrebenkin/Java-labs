@@ -198,27 +198,35 @@ class Custom_linked_list<E> implements Collection<E> {
         return new Iterator<>() {
 
             private Node<E> current_node = first_of_the_list;
+            boolean first_marker = true;
 
             @Override
             public boolean hasNext() {
-                return current_node.next != null;
+                boolean result = false;
+                if (current_node != null) {
+                    result = current_node.next != null;}
+                return result;
             }
 
             @Override
             public E next() {
-                if (hasNext()) {
-                    current_node = current_node.next;
+                if (first_marker) {
+                    first_marker = false;
                     return current_node.data;
                 } else {
-                    return null;
+                    if (hasNext()) {
+                        current_node = current_node.next;
+                        return current_node.data;
+                    }
                 }
+                return null;
             }
         };
     }
 
     @Override
     public <T1> T1[] toArray(T1[] a) {
-        T1[] result = null;
+        T1[] result;
         if (a.length >= size) {
             Iterator<?> iter = iterator();
             int counter = 0;
@@ -228,7 +236,7 @@ class Custom_linked_list<E> implements Collection<E> {
             }
             result = a;
         } else {
-            Object[] array_of_objects = new Object[a.length];
+            Object[] array_of_objects = new Object[size];
             Iterator<?> iter = iterator();
             int counter = 0;
             while (iter.hasNext()) {

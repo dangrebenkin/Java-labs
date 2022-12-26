@@ -89,13 +89,27 @@ public class Test {
         pretty_string(simple_box2);
         System.out.println();
 
-        Iterator <?> iter = simple_box2.iterator();
+        // проитерируем элементы simple_box2
+        Iterator<?> iter = simple_box2.iterator();
         while (iter.hasNext()) {
             System.out.println(iter.next());
         }
-        String[] array_of_strings = new String[simple_box2.size()];
+
+        // попробуем проитерировать элементы пустой коллекции
+        System.out.println();
+        Iterator<?> iter2 = simple_box.iterator();
+        while (iter2.hasNext()) {
+            System.out.println(iter2.next());
+        }
+        System.out.println("Нечего итерировать");
+        System.out.println();
+
+        // создадим массив элементов коллекции большего размера (10>6), чем сама коллекция
+        String[] array_of_strings = new String[10];
         String[] arr = simple_box2.toArray(array_of_strings);
         System.out.println(Arrays.toString(arr));
+        System.out.println();
+
     }
 }
 
