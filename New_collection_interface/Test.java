@@ -106,13 +106,13 @@ public class Test {
 
         // создадим массив элементов коллекции большего размера (10>6), чем сама коллекция
         String[] array_of_strings = new String[10];
-        String[] arr = simple_box2.toArray(array_of_strings);
+        String[] arr = simple_box2.<String>toArray(array_of_strings);
         System.out.println(Arrays.toString(arr));
         System.out.println();
 
         // создадим массив элементов коллекции меньшего размера (4<6), чем сама коллекция
         String[] array_of_strings2 = new String[4];
-        String[] arr2 = simple_box2.toArray(array_of_strings2); // не работает
+        String[] arr2 = simple_box2.toArray(array_of_strings2);
         System.out.println(Arrays.toString(arr2));
 
     }

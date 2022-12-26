@@ -1,5 +1,6 @@
 package New_collection_interface;
 
+import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -227,12 +228,12 @@ class Custom_linked_list<E> implements Collection<E> {
             }
             result = a;
         } else {
-            Object[] new_array = new Object[size];
+            T1[] new_array = (T1[]) Array.newInstance(a.getClass().getComponentType(), size);
             while (iter.hasNext()) {
-                new_array[counter] = iter.next();
+                new_array[counter] = (T1) iter.next();
                 counter++;
             }
-            result = (T1[]) new_array;
+            result = new_array;
         }
         return result;
     }
