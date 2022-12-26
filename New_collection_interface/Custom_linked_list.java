@@ -42,13 +42,10 @@ class Custom_linked_list<E> implements Collection<E> {
     @Override
     public boolean contains(Object o) {
         boolean result = false;
-        Node<E> x = first_of_the_list;
-        for (int j = 0; j < size; j++) {
-            if (x.data.equals(o)) {
+        for (E e : this) {
+            if (e.equals(o)) {
                 result = true;
                 break;
-            } else {
-                x = x.next;
             }
         }
         return result;
@@ -74,6 +71,32 @@ class Custom_linked_list<E> implements Collection<E> {
         return true;
     }
 
+    private boolean remove_from_current_node(Object o, Node<E> current_node) {
+        boolean result = false;
+        while (current_node.next != null){
+            if (current_node.data.equals(o)) {
+                if (current_node.prev == null) {
+                    first_of_the_list = first_of_the_list.next;
+                    first_of_the_list.prev = null;
+                } else {
+                    current_node.prev.next = current_node.next;
+                }
+                result = true;
+                size--;
+                break;
+            } else {
+                current_node = current_node.next;
+            }
+        }
+        if (current_node.next == null && current_node.data.equals(o)) {
+            last_of_the_list = last_of_the_list.prev;
+            last_of_the_list.next = null;
+            result = true;
+            size--;
+        }
+        return result;
+    }
+
     @Override
     public boolean remove(Object o) {
         boolean result = false;
@@ -83,29 +106,7 @@ class Custom_linked_list<E> implements Collection<E> {
                 result = true;
             }
         } else if (size > 1) {
-            Node<E> current_node = first_of_the_list;
-            for (int j = 0; j < size; j++) {
-                if (current_node.data.equals(o)) {
-                    if (j == 0) {
-                        first_of_the_list = current_node.next;
-                        first_of_the_list.prev = null;
-                        result = true;
-                        size--;
-                    } else if (j == size - 1) {
-                        last_of_the_list = current_node.prev;
-                        last_of_the_list.next = null;
-                        result = true;
-                        size--;
-                    } else {
-                        current_node.prev.next = current_node.next;
-                        result = true;
-                        size--;
-                    }
-                    break;
-                } else {
-                    current_node = current_node.next;
-                }
-            }
+          result = remove_from_current_node(o,first_of_the_list);
         }
         return result;
     }
@@ -113,15 +114,11 @@ class Custom_linked_list<E> implements Collection<E> {
     @Override
     public Object[] toArray() {
         Object[] array_of_objects = new Object[size];
-        Node<E> current_node = first_of_the_list;
-        for (int j = 0; j < size; j++) {
-            if (j == size - 1) {
-                array_of_objects[j] = current_node.data;
-                break;
-            } else {
-                array_of_objects[j] = current_node.data;
-                current_node = current_node.next;
-            }
+        Iterator<?> iter = iterator();
+        int counter = 0;
+        while (iter.hasNext()){
+            array_of_objects[counter] = iter.next();
+            counter++;
         }
         return array_of_objects;
     }
@@ -159,25 +156,19 @@ class Custom_linked_list<E> implements Collection<E> {
         Object[] arr = c.toArray();
         if (!isEmpty() && arr.length != 0) {
             Node<E> current_node = first_of_the_list;
-            for (int j = 0; j < size; j++) {
-                for (Object o : arr) {
-                    if (current_node.data.equals(o)) {
-                        if (current_node.next == null) {
-                            break;
-                        } else {
-                            current_node = current_node.next;
-                        }
-                    } else {
-                        remove(o);
+            for (Object o : arr){
+                while (current_node.next != null){
+                    if (!current_node.data.equals(o)) {
+                        remove_from_current_node(o, current_node);
                         result = true;
-                        if (current_node.next != null) {
-                            current_node = current_node.next;
-                        }
                     }
+                    current_node = current_node.next;
+                }
+                if (!current_node.data.equals(o)) {
+                    remove_from_current_node(o, current_node);
                 }
             }
         }
-
         return result;
     }
 
