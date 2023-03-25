@@ -9,4 +9,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 
 public @interface Before {
+    // The code marked @Before is executed before each test,
+    // if test class has ten tests, @Before code will be executed ten times.
 }

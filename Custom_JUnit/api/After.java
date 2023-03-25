@@ -9,4 +9,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 
 public @interface After {
+    // The code marked @After is executed after each test,
+    // if test class has ten tests, @After code will be executed ten times.
 }

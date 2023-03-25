@@ -1,5 +1,7 @@
 package Custom_JUnit.engine;
 
+import Custom_JUnit.api.After;
+import Custom_JUnit.api.Before;
 import Custom_JUnit.api.Test;
 import java.util.logging.Logger;
 
@@ -15,6 +17,13 @@ public class Tests {
         return flag;
     }
 
+    @Before
+    public void test_before() {
+        INVOCATION_LOGGER.entering(TEST_CLASS_NAME, "@Test");
+        String msg = "This test should be reported as passing";
+        System.out.println(msg);
+    }
+
     @Test
     public void testThatShouldPass() {
         INVOCATION_LOGGER.entering(TEST_CLASS_NAME, "@Test");
@@ -28,6 +37,13 @@ public class Tests {
         String msg = "This test should be reported as failing";
         System.out.println(msg);
         assert false : msg;
+    }
+
+    @After
+    public void test_after() {
+        INVOCATION_LOGGER.entering(TEST_CLASS_NAME, "@Test");
+        String msg = "This test should be reported as passing";
+        System.out.println(msg);
     }
 
 }
