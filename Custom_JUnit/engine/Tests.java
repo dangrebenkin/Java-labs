@@ -20,7 +20,7 @@ public class Tests {
     @Before
     public void test_before() {
         INVOCATION_LOGGER.entering(TEST_CLASS_NAME, "@Test");
-        String msg = "This test should be reported as passing";
+        String msg = "before test";
         System.out.println(msg);
     }
 
@@ -42,7 +42,7 @@ public class Tests {
     @After
     public void test_after() {
         INVOCATION_LOGGER.entering(TEST_CLASS_NAME, "@Test");
-        String msg = "This test should be reported as passing";
+        String msg = "after test";
         System.out.println(msg);
     }
 
