@@ -29,6 +29,14 @@ public class TestRunner {
 
         Class<Tests> class_for_test = Tests.class; // пусть пока это будет один класс
 
+        // инициализация экзекьютера
+        ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(max_number_of_threads);
+        if (number_of_threads < 0) {
+            System.out.println("Wrong number of threads was set, please set number of set bigger than 0.");
+        } else if (number_of_threads < max_number_of_threads) {
+            executor.setCorePoolSize(number_of_threads);
+        }
+
         if (args.length == 0) {
             System.out.println("Please specify test class to run");
         } else {
@@ -70,12 +78,6 @@ public class TestRunner {
                 }
 
                 // запуск задач по потокам с помощью executor
-                ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(max_number_of_threads);
-                if (number_of_threads < 0) {
-                    System.out.println("Wrong number of threads was set, please set number of set bigger than 0.");
-                } else if (number_of_threads < max_number_of_threads) {
-                    executor.setCorePoolSize(number_of_threads);
-                }
                 int counter = 1;
                 for (ArrayList<Method> test_task : jobs) {
                     Task task = new Task(test_task, obj, counter);
