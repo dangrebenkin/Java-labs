@@ -1,5 +1,7 @@
 package Custom_JUnit.engine;
 
+import Custom_JUnit.Tests;
+
 import Custom_JUnit.api.After;
 import Custom_JUnit.api.Before;
 import Custom_JUnit.api.Test;
@@ -105,19 +107,19 @@ public class TestRunner {
 
         @Override
         public void run() {
-            ArrayList<Exception> exceptions_array = new ArrayList<>();
+            ArrayList<String> exceptions_array = new ArrayList<>();
             String test_status = String.format("Test %d status: PASSED", test_number);
             try {
                 for (Method class_method : methods_list) {
                     class_method.invoke(class_object, null);
                 }
             } catch (Exception e) {
-                exceptions_array.add(e);
+                exceptions_array.add(String.valueOf(e.getCause()));
             }
             if (exceptions_array.size() > 0) {
-                test_status = String.format("Test %d status: FAILED: %s", test_number, exceptions_array);
+                String exceptions_string = String.join(", ", exceptions_array);
+                test_status = String.format("Test %d status: FAILED: %s", test_number, exceptions_string);
             }
-
             System.out.println(test_status);
         }
     }
