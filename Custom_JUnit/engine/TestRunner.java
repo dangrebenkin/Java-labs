@@ -107,17 +107,37 @@ public class TestRunner {
 
         @Override
         public void run() {
-            ArrayList<String> exceptions_array = new ArrayList<>();
+            ArrayList<Exception> exceptions_array = new ArrayList<>();
             String test_status = String.format("Test %d status: PASSED", test_number);
+            Class expected_exception_argument = null;
             try {
                 for (Method class_method : methods_list) {
+                    if (class_method.isAnnotationPresent(Test.class)) {
+                        Class expected_value = class_method.getAnnotation(Test.class).expected_exception();
+                        if (expected_value == Exception.class || expected_value.getSuperclass() == Exception.class) {
+                            expected_exception_argument = expected_value;
+                        }
+                    }
                     class_method.invoke(class_object, null);
                 }
             } catch (Exception e) {
-                exceptions_array.add(String.valueOf(e.getCause()));
+                  exceptions_array.add(e);
             }
-            if (exceptions_array.size() > 0) {
-                String exceptions_string = String.join(", ", exceptions_array);
+            if (expected_exception_argument != null && exceptions_array.size() == 1) {
+                Exception catched_exception = exceptions_array.get(0);
+                if (catched_exception.getCause().getClass() != expected_exception_argument) {
+                    test_status = String.format("Test %d status: FAILED (expected exception was not catched).", test_number);
+                } else if (expected_exception_argument == Exception.class && catched_exception.getClass().getSuperclass() != Exception.class){
+                    test_status = String.format("Test %d status: FAILED (expected exception was not catched).", test_number);
+                }
+            } else if (expected_exception_argument == null && exceptions_array.size() >= 1) {
+                ArrayList<String> exceptions_string_array = new ArrayList<>();
+                for (int i = 0; i < exceptions_array.size(); i++) {
+                    Exception old_format = exceptions_array.get(i);
+                    String new_format = String.valueOf(old_format.getCause());
+                    exceptions_string_array.add(new_format);
+                }
+                String exceptions_string = String.join(", ", exceptions_string_array);
                 test_status = String.format("Test %d status: FAILED: %s", test_number, exceptions_string);
             }
             System.out.println(test_status);

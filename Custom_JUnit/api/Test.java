@@ -1,5 +1,7 @@
 package Custom_JUnit.api;
 
+import Custom_JUnit.engine.CustomExceptions;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -9,5 +11,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 
 public @interface Test {
-
+    Class expected_exception() default String.class;
 }
