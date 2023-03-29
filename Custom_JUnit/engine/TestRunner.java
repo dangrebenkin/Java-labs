@@ -1,7 +1,5 @@
 package Custom_JUnit.engine;
 
-import Custom_JUnit.Tests;
-
 import Custom_JUnit.api.After;
 import Custom_JUnit.api.Before;
 import Custom_JUnit.api.Test;
@@ -9,7 +7,9 @@ import Custom_JUnit.api.Test;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -18,30 +18,58 @@ public class TestRunner {
 
     private static final int max_number_of_threads = Runtime.getRuntime().availableProcessors();
 
-    public static void main(String[] args) throws ClassNotFoundException,
+    public static void main(String[] args) throws
             InstantiationException,
             IllegalAccessException,
             NoSuchMethodException,
             InvocationTargetException {
+        // parsing arguments
+        final Map<String, List<String>> params = new HashMap<>();
+        List<String> options = null;
+        for (final String a : args) {
+            if (a.charAt(0) == '-') {
+                if (a.length() < 2) {
+                    System.err.println("Error at argument " + a);
+                    return;
+                }
 
-        // параметры из командной строки (пока указал вот так, чтобы тестировать код)
-        int number_of_threads = 6; // -N
-
-        // здесь должен быть парсинг списка классов классов с тестами (<tested-classes>)
-
-        Class<Tests> class_for_test = Tests.class; // пусть пока это будет один класс
-
-        // инициализация экзекьютера
-        ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(max_number_of_threads);
-        if (number_of_threads < 0) {
-            System.out.println("Wrong number of threads was set, please set number of set bigger than 0.");
-        } else if (number_of_threads < max_number_of_threads) {
-            executor.setCorePoolSize(number_of_threads);
+                options = new ArrayList<>();
+                params.put(a.substring(1), options);
+            } else if (options != null) {
+                options.add(a);
+            } else {
+                System.err.println("Illegal parameter usage!");
+                return;
+            }
         }
-
-        if (args.length == 0) {
-            System.out.println("Please specify test class to run");
-        } else {
+        // set executor and threads parameters
+        ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(max_number_of_threads);
+        try {
+            int number_of_threads = Integer.parseInt(params.get("N").get(0));
+            if (number_of_threads <= 0) {
+                System.out.println("Wrong value of threads was set, the max number of threads will be used.");
+            } else if (number_of_threads < max_number_of_threads) {
+                executor.setCorePoolSize(number_of_threads);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("The max number of available core threads will be used.");
+        }
+        // set classes to test
+        ArrayList<Class> classes_with_tests = new ArrayList<>();
+        try {
+            List<String> classes_with_tests_strings = params.get("lc");
+            for (String class_name : classes_with_tests_strings) {
+                Class new_format = Class.forName(class_name);
+                classes_with_tests.add(new_format);
+            }
+            assert classes_with_tests.size() != 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(0);
+        }
+        // running tests
+        for (Class class_for_test : classes_with_tests) {
             // объект класса с тестами
             Object obj = class_for_test.getDeclaredConstructor().newInstance();
 
@@ -86,62 +114,12 @@ public class TestRunner {
                     executor.execute(task);
                     counter++;
                 }
-                executor.shutdown();
-
             } else {
-                System.out.println("There is no test methods to execute.");
+                String warning_message = String.format("There is no test methods to execute in class %s.", class_for_test.getName());
+                System.out.println(warning_message);
             }
         }
-    }
-
-    private static class Task implements Runnable {
-        private final Object class_object;
-        private final ArrayList<Method> methods_list;
-        private final int test_number;
-
-        public Task(ArrayList<Method> methods_to_execute, Object instance, int test_id) {
-            this.class_object = instance;
-            this.methods_list = methods_to_execute;
-            this.test_number = test_id;
-        }
-
-        @Override
-        public void run() {
-            ArrayList<Exception> exceptions_array = new ArrayList<>();
-            String test_status = String.format("Test %d status: PASSED", test_number);
-            Class expected_exception_argument = null;
-            try {
-                for (Method class_method : methods_list) {
-                    if (class_method.isAnnotationPresent(Test.class)) {
-                        Class expected_value = class_method.getAnnotation(Test.class).expected_exception();
-                        if (expected_value == Exception.class || expected_value.getSuperclass() == Exception.class) {
-                            expected_exception_argument = expected_value;
-                        }
-                    }
-                    class_method.invoke(class_object, null);
-                }
-            } catch (Exception e) {
-                  exceptions_array.add(e);
-            }
-            if (expected_exception_argument != null && exceptions_array.size() == 1) {
-                Exception catched_exception = exceptions_array.get(0);
-                if (catched_exception.getCause().getClass() != expected_exception_argument) {
-                    test_status = String.format("Test %d status: FAILED (expected exception was not catched).", test_number);
-                } else if (expected_exception_argument == Exception.class && catched_exception.getClass().getSuperclass() != Exception.class){
-                    test_status = String.format("Test %d status: FAILED (expected exception was not catched).", test_number);
-                }
-            } else if (expected_exception_argument == null && exceptions_array.size() >= 1) {
-                ArrayList<String> exceptions_string_array = new ArrayList<>();
-                for (int i = 0; i < exceptions_array.size(); i++) {
-                    Exception old_format = exceptions_array.get(i);
-                    String new_format = String.valueOf(old_format.getCause());
-                    exceptions_string_array.add(new_format);
-                }
-                String exceptions_string = String.join(", ", exceptions_string_array);
-                test_status = String.format("Test %d status: FAILED: %s", test_number, exceptions_string);
-            }
-            System.out.println(test_status);
-        }
+        executor.shutdown();
     }
 }
 

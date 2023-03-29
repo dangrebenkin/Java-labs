@@ -1,7 +1,5 @@
 package Custom_JUnit.engine;
 
-import java.lang.Exception;
-
 public class CustomExceptions {
 
     public static class NotEqualException extends Exception {
