@@ -23,7 +23,8 @@ public class TestRunner {
             IllegalAccessException,
             NoSuchMethodException,
             InvocationTargetException {
-        // parsing arguments
+
+        // парсинг аргументов
         final Map<String, List<String>> params = new HashMap<>();
         List<String> options = null;
         for (final String a : args) {
@@ -42,7 +43,7 @@ public class TestRunner {
                 return;
             }
         }
-        // set executor and threads parameters
+        // создание пула
         ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(max_number_of_threads);
         try {
             int number_of_threads = Integer.parseInt(params.get("N").get(0));
@@ -55,7 +56,8 @@ public class TestRunner {
             e.printStackTrace();
             System.out.println("The max number of available core threads will be used.");
         }
-        // set classes to test
+
+        // создание списка классов с тестами
         ArrayList<Class> classes_with_tests = new ArrayList<>();
         try {
             List<String> classes_with_tests_strings = params.get("lc");
@@ -68,7 +70,8 @@ public class TestRunner {
             e.printStackTrace();
             System.exit(0);
         }
-        // running tests
+
+        // запуск тестов
         for (Class class_for_test : classes_with_tests) {
             // объект класса с тестами
             Object obj = class_for_test.getDeclaredConstructor().newInstance();

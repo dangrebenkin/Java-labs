@@ -20,6 +20,7 @@ public class Task implements Runnable {
     public void run() {
         ArrayList<Exception> exceptions_array = new ArrayList<>();
         String test_status = String.format("Test %d status: PASSED", test_number);
+
         // проверяем, указано ли значение опционального аргумента в аннотации Test
         Class expected_exception_argument = null;
         try {
@@ -37,6 +38,7 @@ public class Task implements Runnable {
         } catch (Exception e) {
             exceptions_array.add(e);
         }
+
         // если ожидаемого исключения не случилось или помимо него случились другие исключения, то тест провален
         if (expected_exception_argument != null && exceptions_array.size() == 1) {
             Exception catched_exception = exceptions_array.get(0);
